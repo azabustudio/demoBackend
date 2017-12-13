@@ -1,0 +1,25 @@
+{
+  "name": "demobackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/azabustudio/demoBackend.git"
+  },
+  "author": "rui_ding",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/azabustudio/demoBackend/issues"
+  },
+  "homepage": "https://github.com/azabustudio/demoBackend#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "fs": "0.0.1-security"
+  }
+}
