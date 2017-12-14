@@ -2,7 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const url = require('url');
 const app = express();
-const PORT = 80;
+// default 8080
+const PORT = process.argv[2] || 8080;
 
 app.get('/login', function (req, res) {
     let url_parts = url.parse(req.url, true);
