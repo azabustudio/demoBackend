@@ -5,6 +5,12 @@ const app = express();
 // default 8080
 const PORT = process.argv[2] || 8080;
 
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
 app.get('/login', function (req, res) {
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
