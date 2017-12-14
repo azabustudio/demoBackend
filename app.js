@@ -39,7 +39,7 @@ app.get('/login', function (req, res) {
     });
 });
 
-app.get('/getCategory', function (req, res) {
+app.get('/getStatus', function (req, res) {
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
     fs.readFile('./claimTypes.json', function (err, rawCategories) {
