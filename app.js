@@ -4,6 +4,7 @@ const url = require('url');
 const app = express();
 const userService = require('./user.service');
 const statusService = require('./status.service');
+const dynamoUtil = require('./dynamoUtil');
 // default 8080
 const PORT = process.argv[2] || 8080;
 
@@ -13,84 +14,32 @@ app.use(function (req, res, next) {
     next();
 });
 
-// app.get('/login', function (req, res) {
-//     let url_parts = url.parse(req.url, true);
-//     let query = url_parts.query;
-//     fs.readFile('./users.json', function (err, rawUsers) {
-//         if (err) {
-//             console.log(err);
-//             return;
-//         } else {
-//             var users = JSON.parse(rawUsers);
-//             var loginUser = users.find(function (user) {
-//                 return user.loginName === query.username &&
-//                     user.password === query.password;
-//             });
-//             if (loginUser) {
-//                 res.send({
-//                     status: 'sucess',
-//                     user: loginUser
-//                 });
-//             } else {
-//                 res.send({
-//                     status: 'failed',
-//                 });
-//             }
-//         }
-
-//     });
-// });
-
-// app.get('/getStatus', function (req, res) {
-//     let url_parts = url.parse(req.url, true);
-//     let query = url_parts.query;
-
-//     fs.readFile('./claimStatus.json', function (err, rawCategories) {
-//         if (err) {
-//             console.log(err);
-//             return;
-//         } else {
-//             let inputCategory = query.category;
-//             let categories = JSON.parse(rawCategories);
-//             res.send({
-//                 status: categories[inputCategory] ? 'success' : 'failed',
-//                 content: categories[inputCategory]
-//             });
-//         }
-//     });
-// });
-
 app.get('/getStatus', function (req, res) {
     console.log('start getting status');
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
     statusService.getStatus(query.category)
-        .ok(function (err, data) {
-            if (err) {
-                console.error(err);
-                res.send({
-                    status: 'failed',
-                    error: err
-                });
-            } else {
-                console.log(data);
-                res.send({
-                    status: 'success',
-                    content: data.Item.status.S
-                });
-            }
-        });
-
+        .ok(data => res.send({
+            status: 'success',
+            content: dynamoUtil.simplify(data.Item).status
+        }))
+        .fail(res => res.send({
+            status: 'failed',
+            content: res
+        }));
 });
 
-app.get('/getUser', function (req, res) {
-    console.log('start getting user');
+app.get('/login', function (req, res) {
+    console.log('start logging in');
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
-    userService.getUser(query.loginName).ok(function (err, data) {
-        console.log(data);
-    });
-})
+    userService.getUser(query.username)
+        .ok(data => res.send({
+            status: (data.Item && data.Item.password.S === query.password) ? 'success' : 'failed',
+            user: dynamoUtil.simplify(data.Item)
+        }))
+        .fail(err => res.send(err));
+});
 
 app.listen(PORT, _ => {
     console.log(`listening at port:${PORT}`);

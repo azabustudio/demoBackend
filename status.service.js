@@ -16,6 +16,7 @@ var getStatus = function (category) {
         }
     }
     var request = dynamodb.getItem(params);
+    request.send();
     return dynamoPromise(request);
 }
 

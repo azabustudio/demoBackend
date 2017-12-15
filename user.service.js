@@ -7,7 +7,7 @@ const TABLE = 'users';
  * @param {string} loginName
  */
 var getUser = function (loginName) {
-    const params = {
+    let params = {
         TableName: TABLE,
         Key: {
             "loginName": {
@@ -16,6 +16,7 @@ var getUser = function (loginName) {
         }
     }
     var request = dynamodb.getItem(params);
+    request.send();
     return dynamoPromise(request);
 }
 
