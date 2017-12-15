@@ -28,5 +28,5 @@ http://localhost:8080/login?username=test&password=test
 2. get category
 get the category.
 ```
-http://localhost:8080/getCategory?category=A
+http://localhost:8080/getStatu?category=A
 ```
