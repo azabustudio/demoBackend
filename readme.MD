@@ -19,31 +19,31 @@ You can change the listenning port by give the start command an optional paramet
 ### send a request
 there are two kinds of requests
 
-1. login (GET)
+1. login (GET)<br>
 send the username & password to verify.
 ```
 http://localhost:8080/login?username=test&password=test
 ```
 
-2. get category (GET)
+2. get category (GET)<br>
 get the category.
 ```
 http://localhost:8080/getStatus?category=A
 ```
 
-3. Register user (POST)
+3. Register user (POST)<br>
 Register a user.
 ```
 http://localhost:8080/addUser?id=xxx&password=yyy
 ```
 
-4. Add claim (POST)
+4. Add claim (POST)<br>
 Add a claim record.
 ```
 http://localhost:8080/addClaim?loginName=a&claimName=b&claimId=c&claimCatetory=d
 ```
 
-5. get claim list (GET)
+5. get claim list (GET)<br>
 Get all of claims belong to the longin user.
 ```
 http://localhost:8080/getClaimList?loginName=xxx
