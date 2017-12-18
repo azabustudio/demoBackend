@@ -4,7 +4,9 @@ const url = require('url');
 const app = express();
 const userService = require('./user.service');
 const statusService = require('./status.service');
+const claimService= require('./claim.service');
 const dynamoUtil = require('./dynamoUtil');
+
 // default 8080
 const PORT = process.argv[2] || 8080;
 
@@ -39,6 +41,65 @@ app.get('/login', function (req, res) {
             user: dynamoUtil.simplify(data.Item)
         }))
         .fail(err => res.send(err));
+});
+
+app.post('/addUser', function (req, res) {
+
+    console.log('Start adding user.');
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
+
+    userService.addUser(query.loginName, query.password, query.lastName, query.firstName)
+        .ok(data => {
+            res.send({
+                status: 'success'
+            })
+            console.log('Adding a user successfully.');
+        })
+        .fail(res => res.send({
+            status: 'failed',
+            content: res
+        }));
+});
+
+app.get('/getClaimList', function (req, res) {
+
+    console.log('Start getting claim list.');
+
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
+
+    claimService.getClaimList(query.loginName)
+        .ok(data => {
+            res.send({
+                status: 'success',
+                content: dynamoUtil.simplify(data.Items)
+            })
+            console.log('Getting claim list successfully.');
+        })
+        .fail(res => res.send({
+            status: 'failed',
+            content: res
+        }));
+});
+
+app.post('/addClaim', function (req, res) {
+    console.log('Start adding a claim record.');
+
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
+    
+    claimService.addClaim(query.loginName, query.claimId, query.claimName, query.claimCatetory)
+        .ok(data => {
+            res.send({
+                status: 'success'
+            })
+            console.log('Adding a claim record successfully.');
+        })
+        .fail(res => res.send({
+            status: 'failed',
+            content: res
+        }));
 });
 
 app.listen(PORT, _ => {

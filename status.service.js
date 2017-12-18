@@ -1,4 +1,4 @@
-const dynamodb = require('./dynamodb');
+const dynamoInstance = require('./dynamodb');
 const dynamoPromise = require('./dynamoPromise');
 
 const TABLE = 'status';
@@ -15,7 +15,7 @@ var getStatus = function (category) {
             }
         }
     }
-    var request = dynamodb.getItem(params);
+    var request = dynamoInstance.dynamodb.getItem(params);
     request.send();
     return dynamoPromise(request);
 }
