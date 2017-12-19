@@ -5,8 +5,9 @@ const url = require('url');
 const app = express();
 const userService = require('./user.service');
 const statusService = require('./status.service');
-const claimService= require('./claim.service');
+const claimService = require('./claim.service');
 const dynamoUtil = require('./dynamoUtil');
+const querystring = require('querystring');
 
 // default 8080
 const PORT = process.argv[2] || 8080;
@@ -92,19 +93,19 @@ app.post('/addClaim', function (req, res) {
     });
 
     req.on('end', function () {
-        var data = JSON.parse(rawData);
-        
-        claimService.addClaim(data.loginName, data.id, data.catetory, data.name, data.content)
-        .ok(data => {
-            res.send({
-                status: 'success'
+        let claim = JSON.parse(rawData);
+        console.log(claim);
+        claimService.addClaim(claim.loginName, claim.id, claim.catetory, claim.name, claim.content)
+            .ok(data => {
+                res.send({
+                    status: 'success'
+                })
+                console.log('Adding a claim record successfully.');
             })
-            console.log('Adding a claim record successfully.');
-        })
-        .fail(res => res.send({
-            status: 'failed',
-            content: res
-        }));
+            .fail(res => res.send({
+                status: 'failed',
+                content: res
+            }));
     });
 });
 
