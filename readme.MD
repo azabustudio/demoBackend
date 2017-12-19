@@ -34,7 +34,7 @@ http://localhost:8080/getStatus?category=A
 3. Register user (POST)<br>
 Register a user.
 ```
-http://localhost:8080/addUser?id=xxx&password=yyy
+http://localhost:8080/addUser?id=xxx&password=yyy&firstName=Fname&lastName=Lname
 ```
 
 4. Add claim (POST)<br>
