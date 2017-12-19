@@ -1,4 +1,5 @@
 const express = require('express');
+const qs = require('querystring');
 const fs = require('fs');
 const url = require('url');
 const app = express();
@@ -46,10 +47,9 @@ app.get('/login', function (req, res) {
 app.post('/addUser', function (req, res) {
 
     console.log('Start adding user.');
-    let url_parts = url.parse(req.url, true);
-    let query = url_parts.query;
+    let usrInfo = req.body;
 
-    userService.addUser(query.loginName, query.password, query.lastName, query.firstName)
+    userService.addUser(usrInfo.loginName, usrInfo.password, usrInfo.lastName, usrInfo.firstName)
         .ok(data => {
             res.send({
                 status: 'success'
@@ -86,11 +86,15 @@ app.get('/getClaimList', function (req, res) {
 app.post('/addClaim', function (req, res) {
     console.log('Start adding a claim record.');
 
-    let url_parts = url.parse(req.url, true);
-    let query = url_parts.query;
-    
-    claimService.addClaim(query.loginName, query.id,
-        query.catetory, query.name, query.content)
+    let rawData = '';
+    req.on('data', function (chunk) {
+        rawData += chunk;
+    });
+
+    req.on('end', function () {
+        var data = JSON.parse(rawData);
+        
+        claimService.addClaim(data.loginName, data.id, data.catetory, data.name, data.content)
         .ok(data => {
             res.send({
                 status: 'success'
@@ -101,7 +105,10 @@ app.post('/addClaim', function (req, res) {
             status: 'failed',
             content: res
         }));
+    });
 });
+
+
 
 app.listen(PORT, _ => {
     console.log(`listening at port:${PORT}`);

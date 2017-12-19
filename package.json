@@ -26,6 +26,7 @@
     "fs": "0.0.1-security",
     "istanbul": "^0.4.5",
     "jasmine-core": "^2.8.0",
-    "jasmine-node": "^1.14.5"
+    "jasmine-node": "^1.14.5",
+    "query-string": "^5.0.1"
   }
 }

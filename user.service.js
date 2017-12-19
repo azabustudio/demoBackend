@@ -26,6 +26,8 @@ var getUser = function (loginName) {
  * 
  * @param {string} loginId
  * @param {string} password
+ * @param {string} lastName
+ * @param {string} firstName
  */
 var addUser = function (loginName, password, lastName, firstName) {
     let params = {

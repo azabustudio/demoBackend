@@ -28,11 +28,7 @@ var getClaimList = function (loginName, claimId) {
 /**
  * Add a claim record.
  * 
- * @param {string} loginName
- * 
- * @param {string} claimId
- * @param {string} claimName
- * @param {string} claimCatetory
+ * @param claimData
  * 
  */
 var addClaim = function (loginName, id, catetory, name, content) {
