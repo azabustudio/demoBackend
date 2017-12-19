@@ -35,14 +35,15 @@ var getClaimList = function (loginName, claimId) {
  * @param {string} claimCatetory
  * 
  */
-var addClaim = function (loginName, claimId, claimName, claimCatetory) {
+var addClaim = function (loginName, id, catetory, name, content) {
     let params = {
         TableName : TABLE,
         Item:{
             "loginName" : loginName,
-            "claimId" : claimId,
-           "claimCatetory" : claimCatetory,
-           "claimName" : claimName
+            "id" : id,
+           "catetory" : catetory,
+           "name" : name,
+           "content" : content
         }
     }
 

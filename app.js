@@ -89,7 +89,8 @@ app.post('/addClaim', function (req, res) {
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
     
-    claimService.addClaim(query.loginName, query.claimId, query.claimName, query.claimCatetory)
+    claimService.addClaim(query.loginName, query.id,
+        query.catetory, query.name, query.content)
         .ok(data => {
             res.send({
                 status: 'success'

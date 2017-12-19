@@ -40,7 +40,7 @@ http://localhost:8080/addUser?id=xxx&password=yyy&firstName=Fname&lastName=Lname
 4. Add claim (POST)<br>
 Add a claim record.
 ```
-http://localhost:8080/addClaim?loginName=a&claimName=b&claimId=c&claimCatetory=d
+http://localhost:8080/addClaim?loginName=a&id=b&catetory=c&name=d&content=e
 ```
 
 5. get claim list (GET)<br>
