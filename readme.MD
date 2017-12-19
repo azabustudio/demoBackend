@@ -22,29 +22,44 @@ there are two kinds of requests
 1. login (GET)<br>
 send the username & password to verify.
 ```
-http://localhost:8080/login?username=test&password=test
+URL: /login
+URL Params: username, password
 ```
-
 2. get category (GET)<br>
 get the category.
 ```
-http://localhost:8080/getStatus?category=A
+URL: /getStatus
+URL Params: category
 ```
-
 3. Register user (POST)<br>
 Register a user.
 ```
-http://localhost:8080/addUser?id=xxx&password=yyy&firstName=Fname&lastName=Lname
+url: /addUser
+Body:
+{
+  "loginName" : "a",
+  "password" : "b",
+  "lastName" : "c",
+  "firstName" : "d"
+}
 ```
-
 4. Add claim (POST)<br>
 Add a claim record.
 ```
-http://localhost:8080/addClaim?loginName=a&id=b&catetory=c&name=d&content=e
+url: /addClaim
+Body:
+{
+    "loginName" = "a",
+    "id" = "b",
+    "catetory" = "c",
+    "name" = "d",
+    "content" = "e"
+}
 ```
 
 5. get claim list (GET)<br>
 Get all of claims belong to the longin user.
 ```
-http://localhost:8080/getClaimList?loginName=xxx
+URL: /getClaimList
+URL Params: loginName
 ```

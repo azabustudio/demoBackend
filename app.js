@@ -48,19 +48,28 @@ app.get('/login', function (req, res) {
 app.post('/addUser', function (req, res) {
 
     console.log('Start adding user.');
-    let usrInfo = req.body;
+    let rawData = '';
+    req.on('data', function (chunk) {
+        rawData += chunk;
+    });
 
-    userService.addUser(usrInfo.loginName, usrInfo.password, usrInfo.lastName, usrInfo.firstName)
-        .ok(data => {
-            res.send({
-                status: 'success'
+    req.on('end', function () {
+        let usrInfo = JSON.parse(rawData);
+
+        userService.addUser(usrInfo.loginName, usrInfo.password, usrInfo.lastName, usrInfo.firstName)
+            .ok(data => {
+                res.send({
+                    status: 'success'
+                })
+                console.log('Adding a user successfully.');
             })
-            console.log('Adding a user successfully.');
-        })
-        .fail(res => res.send({
-            status: 'failed',
-            content: res
+            .fail(res => res.send({
+                status: 'failed',
+                content: res
         }));
+    });
+
+    
 });
 
 app.get('/getClaimList', function (req, res) {
