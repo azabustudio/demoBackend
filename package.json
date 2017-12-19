@@ -20,6 +20,7 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
+    "aws-sdk": "^2.171.0",
     "fs": "0.0.1-security"
   }
 }
