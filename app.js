@@ -103,7 +103,7 @@ app.post('/addClaim', function (req, res) {
     req.on('end', function () {
         let claim = JSON.parse(rawData);
         console.log(claim);
-        claimService.addClaim(claim.loginName, claim.id, claim.catetory, claim.name, claim.content)
+        claimService.addClaim(claim.id, claim.category, claim.content, claim.loginName, claim.name, claim.status)
             .ok(data => {
                 res.send({
                     status: 'success'
