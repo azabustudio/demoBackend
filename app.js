@@ -147,7 +147,8 @@ app.post('/updateClaim', function (req, res) {
 
     req.on('end', function () {
         let claim = JSON.parse(rawData);
-        console.log(`Start updating a claim record. id = {claim.id} `);
+        console.log(claim);
+        console.log(`Start updating a claim record.`);
         claimService.updateClaim(claim)
             .ok(data => {
                 res.send({
@@ -162,15 +163,17 @@ app.post('/updateClaim', function (req, res) {
     });
 });
 
-app.get('/closeClaim', function (req, res) {
+app.get('/updateClaimStatus', function (req, res) {
 
-    console.log('Start closing claim');
+    console.log('Start updating claim status');
 
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
 
+    let status = query.status;
+
     console.log(query.claimId);
-    claimService.updateStatus(query.claimId, 'closed')
+    claimService.updateStatus(query.claimId, status)
         .ok(data => {
             res.send({
                 status: 'success'

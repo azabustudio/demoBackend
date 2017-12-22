@@ -40,7 +40,7 @@ var addClaim = function (id, category, content, loginName, name, status) {
     let params = {
         TableName: TABLE,
         Item: {
-            "id" : Number(id),
+            "id": Number(id),
             "category": category,
             "content": content,
             "loginName": loginName,
@@ -74,20 +74,18 @@ var updateClaim = function (claimData) {
     let params = {
         TableName: TABLE,
         Key: {
-            'id': claimData.id
+            'id': Number(claimData.id)
         },
-        UpdateExpression: 'set #name=:n, #content=:c, #category=:t, #status=:s',
+        UpdateExpression: 'set #name=:n, #content=:c, #category=:t',
         ExpressionAttributeNames: {
             '#name': 'name',
             '#content': 'content',
-            '#category': 'category',
-            '#status': 'status'
+            '#category': 'category'
         },
         ExpressionAttributeValues: {
             ':r': claimData.name,
             ':c': claimData.content,
-            ':t': claimData.catetory,
-            ':s': claimData.status
+            ':t': claimData.catetory
         }
     }
     var request = dynamoInstance.docClient.update(params);
