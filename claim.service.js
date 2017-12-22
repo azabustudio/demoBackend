@@ -12,12 +12,12 @@ var getClaimList = function (loginName) {
     var params = {
         TableName: TABLE,
         IndexName: 'loginName-index',
-        KeyConditionExpression: "#loginName = :loginName",
+        KeyConditionExpression: '#loginName = :loginName',
         ExpressionAttributeNames: {
-            "#loginName": "loginName"
+            '#loginName': 'loginName'
         },
         ExpressionAttributeValues: {
-            ":loginName": loginName
+            ':loginName': loginName
         }
     };
 
@@ -36,11 +36,11 @@ var addClaim = function (loginName, id, catetory, name, content) {
     let params = {
         TableName: TABLE,
         Item: {
-            "loginName": loginName,
-            "id": id,
-            "catetory": catetory,
-            "name": name,
-            "content": content
+            'loginName': loginName,
+            'id': Number(id),
+            'catetory': catetory,
+            'name': name,
+            'content': content
         }
     }
 
@@ -49,7 +49,73 @@ var addClaim = function (loginName, id, catetory, name, content) {
     return dynamoPromise(request);
 }
 
+var removeClaim = function (id) {
+    let params = {
+        TableName: TABLE,
+        Key: {
+            'id': id
+        }
+    }
+    var request = dynamoInstance.docClient.delete(params);
+    request.send();
+    return dynamoPromise(request);
+}
+
+/**
+ *
+ * @param {Claim} claimData
+ */
+var updateClaim = function (claimData) {
+    let params = {
+        TableName: TABLE,
+        Key: {
+            'id': claimData.id
+        },
+        UpdateExpression: 'set #name=:n, #content=:c, #category=:t, #status=:s',
+        ExpressionAttributeNames: {
+            '#name': 'name',
+            '#content': 'content',
+            '#category': 'category',
+            '#status': 'status'
+        },
+        ExpressionAttributeValues: {
+            ':r': claimData.name,
+            ':c': claimData.content,
+            ':t': claimData.catetory,
+            ':s': claimData.status
+        }
+    }
+    var request = dynamoInstance.docClient.update(params);
+    request.send();
+    return dynamoPromise(request);
+}
+
+var updateStatus = function (claimId, status) {
+    let params = {
+        TableName: TABLE,
+        Key: {
+            id: Number(claimId)
+        },
+        ExpressionAttributeNames: {
+            '#status': 'status'
+        },
+        ExpressionAttributeValues: {
+            ':s': status,
+        },
+        UpdateExpression: 'set #status = :s'
+
+    };
+    console.log(claimId + status);
+    console.log(params);
+    var request = dynamoInstance.docClient.update(params);
+    request.send();
+    return dynamoPromise(request);
+}
+
 module.exports = {
     addClaim: addClaim,
-    getClaimList: getClaimList
+    getClaimList: getClaimList,
+    removeClaim: removeClaim,
+    updateClaim: updateClaim,
+    updateStatus: updateStatus
 }

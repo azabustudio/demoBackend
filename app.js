@@ -117,6 +117,71 @@ app.post('/addClaim', function (req, res) {
     });
 });
 
+app.get('/removeClaim', function (req, res) {
+
+    console.log('Start removing claim');
+
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
+
+    console.log(query.loginName);
+    claimService.removeClaim(query.claimId)
+        .ok(data => {
+            res.send({
+                status: 'success'
+            })
+            console.log('removed claim successfully.');
+        })
+        .fail(res => res.send({
+            status: 'failed',
+            content: res
+        }));
+});
+
+app.post('/updateClaim', function (req, res) {
+
+    let rawData = '';
+    req.on('data', function (chunk) {
+        rawData += chunk;
+    });
+
+    req.on('end', function () {
+        let claim = JSON.parse(rawData);
+        console.log(`Start updating a claim record. id = {claim.id} `);
+        claimService.updateClaim(claim)
+            .ok(data => {
+                res.send({
+                    status: 'success'
+                })
+                console.log('Adding a claim record successfully.');
+            })
+            .fail(res => res.send({
+                status: 'failed',
+                content: res
+            }));
+    });
+});
+
+app.get('/closeClaim', function (req, res) {
+
+    console.log('Start closing claim');
+
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
+
+    console.log(query.claimId);
+    claimService.updateStatus(query.claimId, 'closed')
+        .ok(data => {
+            res.send({
+                status: 'success'
+            })
+            console.log('removed claim successfully.');
+        })
+        .fail(res => res.send({
+            status: 'failed',
+            content: res
+        }));
+});
 
 
 app.listen(PORT, _ => {
