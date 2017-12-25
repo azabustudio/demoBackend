@@ -2,6 +2,7 @@ const dynamoInstance = require('./dynamodb');
 const dynamoPromise = require('./dynamoPromise');
 
 const TABLE = 'claim';
+const SEQUENCE_TABLE = 'sequence';
 
 /**
  * Get all of claims belong to login user.
@@ -36,22 +37,65 @@ var getClaimList = function (loginName) {
  * @param {string} status
  *
  */
-var addClaim = function (id, category, content, loginName, name, status) {
+var addClaim = function (category, content, loginName, name, status) {
     let params = {
         TableName: TABLE,
         Item: {
-            "id": Number(id),
             "category": category,
             "content": content,
             "loginName": loginName,
             "name": name,
-            "status": status
+            "status": 'processing',
+            "active": true,
+        },
+    }
+
+    return new Promise(function (resolve, reject) {
+        getNewSequence().then(data => {
+            let id = data.Attributes.current_number;
+            console.log('new sequence is: ' + id);
+            params.Item.id = Number(id);
+            var claimRequest = dynamoInstance.docClient.put(params);
+            return claimRequest.promise()
+                .then(_ => getClaim(id)
+                    .then(data => resolve(data))
+                    .catch(err => reject(err)))
+                .catch(err => console.error(err));
+        });
+    });
+}
+
+var getClaim = function (claimId) {
+    let params = {
+        TableName: TABLE,
+        Key: {
+            id: Number(claimId)
         }
     }
 
-    var request = dynamoInstance.docClient.put(params);
-    request.send();
-    return dynamoPromise(request);
+    console.log('claim request send: ');
+    console.log(params);
+    var request = dynamoInstance.docClient.get(params)
+    return request.promise();
+}
+
+/**
+ * @returns {DynamoPromise} dynamoPromise
+ */
+var getNewSequence = function () {
+    let params = {
+        TableName: SEQUENCE_TABLE,
+        Key: {
+            name: TABLE
+        },
+        UpdateExpression: "set current_number = current_number + :val",
+        ExpressionAttributeValues: {
+            ":val": 1
+        },
+        ReturnValues: "UPDATED_NEW"
+    }
+    var request = dynamoInstance.docClient.update(params);
+    return request.promise();
 }
 
 var removeClaim = function (id) {
@@ -83,11 +127,32 @@ var updateClaim = function (claimData) {
             '#category': 'category'
         },
         ExpressionAttributeValues: {
-            ':r': claimData.name,
+            ':n': claimData.name,
             ':c': claimData.content,
-            ':t': claimData.catetory
+            ':t': claimData.category
         }
     }
+    var request = dynamoInstance.docClient.update(params);
+    request.send();
+    return dynamoPromise(request);
+}
+
+var activateClaim = function (claimId, active) {
+    let params = {
+        TableName: TABLE,
+        Key: {
+            id: Number(claimId)
+        },
+        ExpressionAttributeNames: {
+            '#active': 'active'
+        },
+        ExpressionAttributeValues: {
+            ':a': active,
+        },
+        UpdateExpression: 'set #active = :a'
+
+    };
+    console.log(claimId + active);
     var request = dynamoInstance.docClient.update(params);
     request.send();
     return dynamoPromise(request);
@@ -120,5 +185,6 @@ module.exports = {
     getClaimList: getClaimList,
     removeClaim: removeClaim,
     updateClaim: updateClaim,
-    updateStatus: updateStatus
+    updateStatus: updateStatus,
+    activateClaim: activateClaim
 }

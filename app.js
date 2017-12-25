@@ -103,14 +103,15 @@ app.post('/addClaim', function (req, res) {
     req.on('end', function () {
         let claim = JSON.parse(rawData);
         console.log(claim);
-        claimService.addClaim(claim.id, claim.category, claim.content, claim.loginName, claim.name, claim.status)
-            .ok(data => {
+        claimService.addClaim(claim.category, claim.content, claim.loginName, claim.name, claim.status)
+            .then(data => {
                 res.send({
-                    status: 'success'
+                    status: 'success',
+                    claim: data.Item
                 })
                 console.log('Adding a claim record successfully.');
             })
-            .fail(res => res.send({
+            .catch(res => res.send({
                 status: 'failed',
                 content: res
             }));
@@ -154,7 +155,7 @@ app.post('/updateClaim', function (req, res) {
                 res.send({
                     status: 'success'
                 })
-                console.log('Adding a claim record successfully.');
+                console.log('updated a claim record successfully.');
             })
             .fail(res => res.send({
                 status: 'failed',
@@ -178,7 +179,29 @@ app.get('/updateClaimStatus', function (req, res) {
             res.send({
                 status: 'success'
             })
-            console.log('removed claim successfully.');
+            console.log('claim status updated successfully');
+        })
+        .fail(res => res.send({
+            status: 'failed',
+            content: res
+        }));
+});
+
+app.get('/activateClaim', function (req, res) {
+
+    console.log('Start activating claim status');
+
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
+
+    let active = query.active;
+
+    console.log(query.claimId);
+    claimService.activateClaim(query.claimId, active)
+        .ok(data => {
+            res.send({
+                status: 'success'
+            });
         })
         .fail(res => res.send({
             status: 'failed',

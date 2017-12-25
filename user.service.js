@@ -1,7 +1,7 @@
 const dynamoInstance = require('./dynamodb');
 const dynamoPromise = require('./dynamoPromise');
 
-const TABLE = 'users';
+const TABLE = 'user';
 
 /**
  * Get user information from Dynamo DB.
@@ -23,7 +23,7 @@ var getUser = function (loginName) {
 
 /**
  * Register user information to Dynamo DB.
- * 
+ *
  * @param {string} loginId
  * @param {string} password
  * @param {string} lastName
@@ -31,12 +31,12 @@ var getUser = function (loginName) {
  */
 var addUser = function (loginName, password, lastName, firstName) {
     let params = {
-        TableName : TABLE,
-        Item:{
-            "loginName" : loginName,
-            "password" : password,
-            "lastName" : lastName,
-            "firstName" : firstName
+        TableName: TABLE,
+        Item: {
+            "loginName": loginName,
+            "password": password,
+            "lastName": lastName,
+            "firstName": firstName
         }
     }
 
