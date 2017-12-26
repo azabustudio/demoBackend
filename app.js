@@ -77,7 +77,6 @@ app.get('/getClaimList', function (req, res) {
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
 
-    console.log(query.loginName);
     claimService.getClaimList(query.loginName)
         .ok(data => {
             res.send({

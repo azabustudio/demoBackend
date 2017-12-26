@@ -1,7 +1,7 @@
 const dynamoInstance = require('./dynamodb');
 const dynamoPromise = require('./dynamoPromise');
 
-const TABLE = 'user';
+const TABLE = 'users';
 
 /**
  * Get user information from Dynamo DB.
