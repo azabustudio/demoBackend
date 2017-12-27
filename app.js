@@ -2,15 +2,50 @@ const express = require('express');
 const qs = require('querystring');
 const fs = require('fs');
 const url = require('url');
-const app = express();
 const userService = require('./user.service');
 const statusService = require('./status.service');
 const claimService = require('./claim.service');
 const dynamoUtil = require('./dynamoUtil');
 const querystring = require('querystring');
+const argv = require('minimist')(process.argv.slice(2));
+const bodyParser = require('body-parser');
 
 // default 8080
 const PORT = process.argv[2] || 8080;
+const app = express();
+const subpath = express();
+
+app.use(bodyParser());
+app.use('/v1', subpath);
+const swagger = require('swagger-node-express').createNew(subpath);
+
+app.use(express.static('dist'));
+
+swagger.setApiInfo({
+    title: 'demo API',
+    description: 'the API of demo',
+    termsOfServiceUrl: '',
+    contact: 'azabuStudio9@gmail.com',
+    licence: 'MIT',
+    licenseUrl: ''
+});
+app.get('/', function (req, res) {
+    res.sendFile(__dirname + '/dist/index.html');
+});
+
+swagger.configureSwaggerPaths('', 'api-docs', '');
+
+const domain = 'localhost';
+if (argv.domain != undefined) {
+    domain = argv.domain
+} else {
+    console.log('No --domain=xxx specified, taking default hostname "localhost".');
+}
+
+var applicationUrl = 'http://localhost:' + PORT;
+console.log('snapJob API running on ' + applicationUrl);
+
+swagger.configure(applicationUrl, '1.0.0');
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
