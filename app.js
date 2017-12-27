@@ -117,27 +117,6 @@ app.post('/addClaim', function (req, res) {
     });
 });
 
-app.get('/removeClaim', function (req, res) {
-
-    console.log('Start removing claim');
-
-    let url_parts = url.parse(req.url, true);
-    let query = url_parts.query;
-
-    console.log(query.loginName);
-    claimService.removeClaim(query.claimId)
-        .ok(data => {
-            res.send({
-                status: 'success'
-            })
-            console.log('removed claim successfully.');
-        })
-        .fail(res => res.send({
-            status: 'failed',
-            content: res
-        }));
-});
-
 app.post('/updateClaim', function (req, res) {
 
     let rawData = '';

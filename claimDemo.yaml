@@ -1,0 +1,314 @@
+swagger: "2.0"
+info:
+  description: "This is the API document of the claim demo"
+  version: "1.0.0"
+  title: "Claim Demo"
+  contact:
+    email: "rayjp2010@gmail.com"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "localhost:8080"
+basePath: "/"
+tags:
+- name: "claim"
+  description: "Everything about claim"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more about user"
+    url: "http://swagger.io"
+schemes:
+- "http"
+paths:
+  /getClaimList:
+    get:
+      tags:
+      - "claim"
+      summary: "get all the claims of login user"
+      operationId: "getClaimByLoginName"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "loginName"
+        description: "the loginName of login user"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "get the claimlist successfully"
+          schema:
+            title: "list of the claim"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "success"
+              content:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Claim"
+        405:
+          description: "Invalid input"
+          schema:
+            title: "error message"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "failed"
+              content:
+                type: "string"
+
+  /addClaim:
+    post:
+      tags:
+      - "claim"
+      summary: "add a new claim"
+      description: "add a new claim"
+      operationId: "addClaim"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "the new claim to be create"
+        required: true
+        schema:
+          $ref: "#/definitions/Claim"
+      responses:
+        200:
+          description: "the new created claim"
+          schema:
+            title: "created claim"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "success"
+              content:
+                  $ref: "#/definitions/Claim"
+        400:
+          description: "Invalid status value"
+          schema:
+            title: "error message"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "failed"
+              content:
+                type: "string"
+  /updateClaim:
+    post:
+      tags:
+      - "claim"
+      summary: "update claim info"
+      description: "update claim info"
+      operationId: "updateClaim"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "update claim info by input"
+        required: true
+        schema:
+          $ref: "#/definitions/Claim"
+      responses:
+        200:
+          description: "the updated claim"
+          schema:
+            title: "update claim"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "success"
+              content:
+                  $ref: "#/definitions/Claim"
+        400:
+          description: "Invalid status value"
+          schema:
+            title: "error message"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "failed"
+              content:
+                type: "string"
+  /updateClaimStatus:
+    get:
+      tags:
+      - "claim"
+      summary: "update claim status by claim id to specified status"
+      description: "update claim status by claim id to specified status"
+      operationId: "updateClaimStatus"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "claimId"
+        in: "query"
+        description: "id of the claim to be update"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "query"
+        description: "new status of the claim"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            title: "success message"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "success"
+        400:
+          description: "update failed"
+          schema:
+            title: "error message"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "failed"
+              content:
+                title: "error contents"
+                type: "string"
+  /activateClaim:
+    get:
+      tags:
+      - "claim"
+      summary: "activate or deactivate claim"
+      description: "activate or deactivate claim"
+      operationId: "activateClaim"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "claimId"
+        in: "query"
+        description: "id of the claim to be activate"
+        required: true
+        type: "number"
+      - name: "active"
+        in: "query"
+        description: "whether the new claim should be"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            title: "success message"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "success"
+        400:
+          description: "activate failed"
+          schema:
+            title: "error message"
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                default: "failed"
+              content:
+                title: "error contents"
+                type: "string"
+  /addUser:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "create a new user."
+      operationId: "addUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "loginName"
+        description: "loginName of user"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+  /login:
+    post:
+      tags:
+      - "user"
+      summary: "Creates list of users with given input array"
+      description: ""
+      operationId: "createUsersWithArrayInput"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+definitions:
+  User:
+    type: "object"
+    properties:
+      loginName:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      password:
+        type: "string"
+    xml:
+      name: "User"
+  Claim:
+    type: "object"
+    required:
+    - "name"
+    - "category"
+    properties:
+      id:
+        type: "number"
+      name:
+        type: "string"
+      content:
+        type: "string"
+      category:
+        type: "string"
+        default: "A"
+      active:
+        type: "string"
+      loginName:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
