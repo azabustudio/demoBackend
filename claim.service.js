@@ -1,8 +1,8 @@
 const dynamoInstance = require('./dynamodb');
 const dynamoPromise = require('./dynamoPromise');
-
-const TABLE = 'claim';
-const SEQUENCE_TABLE = 'sequence';
+const global = require('./global');
+const TABLE = global.table_prefix + 'claim';
+const SEQUENCE_TABLE = global.table_prefix + 'sequence';
 
 /**
  * Get all of claims belong to login user.

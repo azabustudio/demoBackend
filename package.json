@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.171.0",
+    "dotenv": "^4.0.0",
     "express-swagger-generator": "^1.0.4",
     "fs": "0.0.1-security",
     "istanbul": "^0.4.5",

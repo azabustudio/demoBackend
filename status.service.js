@@ -1,7 +1,8 @@
 const dynamoInstance = require('./dynamodb');
 const dynamoPromise = require('./dynamoPromise');
+const global = require('./global');
 
-const TABLE = 'status';
+const TABLE = global.table_prefix + 'status';
 
 /**
  * @param {string} loginName
