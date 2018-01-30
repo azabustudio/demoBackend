@@ -2,7 +2,7 @@ const dynamoInstance = require('./dynamodb');
 const dynamoPromise = require('./dynamoPromise');
 const global = require('./global');
 
-const TABLE = global.table_prefix + 'users';
+const TABLE = 'users' + global.table_suffix;
 
 /**
  * Get user information from Dynamo DB.
