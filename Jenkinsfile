@@ -27,7 +27,7 @@ node {
             sh "npm install"
         }
         stage("add credential"){
-            sh ("rsync -avr -e 'ssh -i ${ssh_key_path}' ../.aws centos@${server}:~/.ssh/.aws ")
+            sh ("rsync -avr -e 'ssh -i ${ssh_key_path}' ../.aws centos@${server}:~/.aws")
         }
         stage ("Code analyse") {
             sh "echo \"Run some lints\""
