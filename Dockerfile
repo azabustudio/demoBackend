@@ -2,6 +2,6 @@ FROM node:carbon
 
 WORKDIR /usr/src/app
 COPY . .
+COPY ~/.aws ~/.aws
 
-USER root
 CMD node app.js
