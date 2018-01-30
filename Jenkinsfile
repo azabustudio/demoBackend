@@ -7,9 +7,14 @@ def ssh_key_path = '../AzabuStudio.pem'
 def payload= parseJson("$payload")
 //branch name
 def branch = payload.ref.split("/")[2]
-def server = "$"+branch+"_server"
+def server = ""
+if(branch == "master"){
+    server = "$production_server"
+}else{
+    server = "$release_server"
+}
 def jenkins_home = '/var/jenkins_home'
-def deploy_path = '~/www/claimDemo'
+def deploy_path = '~/claimDemo'
 def deploy_port = 8080
 def image_name = 'claimdemo'
 def version = 'latest'
@@ -53,6 +58,11 @@ node {
         }
         notification(err_msg)
     }
+}
+
+@NonCPS
+def parseJson(text) {
+    return new groovy.json.JsonSlurperClassic().parseText(text)
 }
 
 // 実行結果のSlack通知
