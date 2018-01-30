@@ -3,7 +3,6 @@ def err_msg = ""
 def repo_name = "demoBackend"
 def git_url = "git@github.com:azabustudio/${repo_name}.git"
 def release_branch = "master"
-def server = "10.1.94.123"
 def ssh_key_path = '../AzabuStudio.pem'
 def payload= parseJson("$payload")
 //branch name
