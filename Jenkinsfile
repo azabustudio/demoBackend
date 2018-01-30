@@ -39,7 +39,7 @@ node {
         }
 
         stage ("Deploy") {
-            sh "rsync -avr -e \"ssh -i ${ssh_key_path}\" ./ centos@${server}:${deploy_path}"
+            sh "rsync -avr -e 'ssh -i ${ssh_key_path}' ./ centos@${server}:${deploy_path}"
         }
 
         stage ("build docker image & container"){
