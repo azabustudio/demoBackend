@@ -187,6 +187,12 @@ app.get('/activateClaim', function (req, res) {
         }));
 });
 
+app.get('/tokkenTest', function (req, res) {
+    console.log('start sending tokken');
+    var param = {"値":"これはサンプルAPIです"};
+    res.header('Content-Type', 'application/json; charset=utf-8')
+    res.send(param);
+});
 
 app.listen(PORT, _ => {
     console.log(`listening at port:${PORT}`);
