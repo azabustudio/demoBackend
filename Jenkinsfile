@@ -3,11 +3,19 @@ def err_msg = ""
 def repo_name = "demoBackend"
 def git_url = "git@github.com:azabustudio/${repo_name}.git"
 def release_branch = "master"
-def production_server = "10.1.94.123"
 def ssh_key_path = '../AzabuStudio.pem'
+def payload= parseJson("$payload")
+//branch name
+def branch = payload.ref.split("/")[2]
+def server = ""
+if(branch == "master"){
+    server = "$production_server"
+}else{
+    server = "$release_server"
+}
 def jenkins_home = '/var/jenkins_home'
-def deploy_path = '~/www/claimDemo'
-def deploy_port = 80
+def deploy_path = '~/claimDemo'
+def deploy_port = 8080
 def image_name = 'claimdemo'
 def version = 'latest'
 def container_name = 'claimdemo'
@@ -31,15 +39,15 @@ node {
         }
 
         stage ("Deploy") {
-            sh "rsync -avr ./ -e \"ssh -i ${ssh_key_path}\" ./ centos@${production_server}:${deploy_path}"
+            sh "rsync -avr ./ -e \"ssh -i ${ssh_key_path}\" ./ centos@${server}:${deploy_path}"
         }
 
         stage ("build docker image & container"){
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"sudo docker stop ${container_name} || true  \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"sudo docker rm ${container_name} || true \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"sudo docker rmi ${image_name}:${version} || true \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"cd ${deploy_path} && sudo docker build -t ${image_name}:${version} . \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"cd ${deploy_path} && sudo docker run --name ${container_name} -p ${deploy_port}:8080 -d ${image_name}:${version} \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker stop ${container_name} || true  \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker rm ${container_name} || true \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker rmi ${image_name}:${version} || true \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"cd ${deploy_path} && sudo docker build -t ${image_name}:${version} . \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"cd ${deploy_path} && sudo docker run --name ${container_name} -p ${deploy_port}:8080 -d ${image_name}:${version} \""
         }
     }catch(e){
         err_msg = "${e}"
@@ -50,6 +58,11 @@ node {
         }
         notification(err_msg)
     }
+}
+
+@NonCPS
+def parseJson(text) {
+    return new groovy.json.JsonSlurperClassic().parseText(text)
 }
 
 // 実行結果のSlack通知
