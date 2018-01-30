@@ -3,22 +3,17 @@ def err_msg = ""
 def repo_name = "demoBackend"
 def git_url = "git@github.com:azabustudio/${repo_name}.git"
 def release_branch = "master"
-<<<<<<< HEAD
 def ssh_key_path = '../AzabuStudio.pem'
 def payload= parseJson("$payload")
 //branch name
 def branch = payload.ref.split("/")[2]
 def server = "$"+branch+"_server"
-=======
-def production_server = "10.1.94.123"
-def ssh_key_path = '../AzabuStudio.pem'
 def jenkins_home = '/var/jenkins_home'
 def deploy_path = '~/www/claimDemo'
-def deploy_port = 80
+def deploy_port = 8080
 def image_name = 'claimdemo'
 def version = 'latest'
 def container_name = 'claimdemo'
->>>>>>> aec6189a3990d9284130dd1c14d02ceecc6389bc
 
 node {
     try {
@@ -27,19 +22,11 @@ node {
             sh "npm install"
         }
         stage ("Code analyse") {
-<<<<<<< HEAD
-            sh "echo “Run some lints”"
-        }
-
-        stage ("Unit test") {
-            sh "echo \"Tests will back\""
-=======
             sh "echo \"Run some lints\""
         }
 
         stage ("Unit test") {
             sh "echo 'Tests will back'"
->>>>>>> aec6189a3990d9284130dd1c14d02ceecc6389bc
         }
 
         stage ("Build") {
@@ -47,19 +34,15 @@ node {
         }
 
         stage ("Deploy") {
-<<<<<<< HEAD
-            sh "rsync -avr -e ssh -i ${ssh_key_path} centos@${server} . /var/www/claimDemo/"
-=======
-            sh "rsync -avr ./ -e \"ssh -i ${ssh_key_path}\" ./ centos@${production_server}:${deploy_path}"
+            sh "rsync -avr ./ -e \"ssh -i ${ssh_key_path}\" ./ centos@${server}:${deploy_path}"
         }
 
         stage ("build docker image & container"){
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"sudo docker stop ${container_name} || true  \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"sudo docker rm ${container_name} || true \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"sudo docker rmi ${image_name}:${version} || true \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"cd ${deploy_path} && sudo docker build -t ${image_name}:${version} . \""
-            sh "ssh -i ${ssh_key_path} -t centos@10.1.94.123 \"cd ${deploy_path} && sudo docker run --name ${container_name} -p ${deploy_port}:8080 -d ${image_name}:${version} \""
->>>>>>> aec6189a3990d9284130dd1c14d02ceecc6389bc
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker stop ${container_name} || true  \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker rm ${container_name} || true \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker rmi ${image_name}:${version} || true \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"cd ${deploy_path} && sudo docker build -t ${image_name}:${version} . \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"cd ${deploy_path} && sudo docker run --name ${container_name} -p ${deploy_port}:8080 -d ${image_name}:${version} \""
         }
     }catch(e){
         err_msg = "${e}"
@@ -68,11 +51,7 @@ node {
         if(currentBuild.result != "FAILURE") {
             currentBuild.result = "SUCCESS"
         }
-<<<<<<< HEAD
-        // notification(err_msg)
-=======
         notification(err_msg)
->>>>>>> aec6189a3990d9284130dd1c14d02ceecc6389bc
     }
 }
 
