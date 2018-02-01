@@ -10,8 +10,10 @@ def branch = payload.ref.split("/")[2]
 def server = ""
 if(branch == "master"){
     server = "$production_server"
-}else{
+}else if(branch = "release"){
     server = "$release_server"
+}else{
+    server = "$develop_server"
 }
 def jenkins_home = '/var/jenkins_home'
 def deploy_path = '~/claimDemo'
