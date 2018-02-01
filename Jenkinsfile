@@ -10,7 +10,7 @@ def branch = payload.ref.split("/")[2]
 def server = ""
 if(branch == "master"){
     server = "$production_server"
-}else if(branch = "release"){
+}else if(branch == "release"){
     server = "$release_server"
 }else{
     server = "$develop_server"
