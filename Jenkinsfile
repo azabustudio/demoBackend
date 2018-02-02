@@ -9,7 +9,7 @@ def payload= parseJson("$payload")
 def branch = payload.ref.split("/")[2]
 def server = ""
 if(branch == "master"){
-    server = "$production_server"
+    server = "$master_server"
 }else if(branch == "release"){
     server = "$release_server"
 }else{
