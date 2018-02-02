@@ -1,5 +1,4 @@
 # Simple API for http request
-test
 
 ## 1. How to Install
 ```
