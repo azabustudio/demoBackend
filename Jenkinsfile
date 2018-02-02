@@ -9,7 +9,7 @@ def payload= parseJson("$payload")
 def branch = payload.ref.split("/")[2]
 def server = ""
 if(branch == "master"){
-    server = "$production_server"
+    server = "$master_server"
 }else if(branch == "release"){
     server = "$release_server"
 }else{
@@ -27,6 +27,9 @@ node {
         stage ("Prepare environment") {
             git branch: "${release_branch}", url: "${git_url}"
             sh "npm install"
+        }
+        stage("add credential"){
+            sh ("rsync -avr -e 'ssh -i ${ssh_key_path} ' ${jenkins_home}/.aws centos@${server}:${deploy_path}")
         }
         stage ("Code analyse") {
             sh "echo \"Run some lints\""
