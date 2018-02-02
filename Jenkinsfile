@@ -29,7 +29,7 @@ node {
             sh "npm install"
         }
         stage("add credential"){
-            sh ("rsync -avr -e ssh ${jenkins_home}/.aws centos@${server}:${deploy_path}")
+            sh ("rsync -avr -e 'ssh -i ${ssh_key_path} ' ${jenkins_home}/.aws centos@${server}:${deploy_path}")
         }
         stage ("Code analyse") {
             sh "echo \"Run some lints\""
@@ -48,11 +48,11 @@ node {
         }
 
         stage ("build docker image & container"){
-            sh "ssh -t centos@${server} \"sudo docker stop ${container_name} || true  \""
-            sh "ssh -t centos@${server} \"sudo docker rm ${container_name} || true \""
-            sh "ssh -t centos@${server} \"sudo docker rmi ${image_name}:${version} || true \""
-            sh "ssh -t centos@${server} \"cd ${deploy_path} && sudo docker build -t ${image_name}:${version} . \""
-            sh "ssh -t centos@${server} \"cd ${deploy_path} && sudo docker run --name ${container_name} -p ${deploy_port}:8080 -d ${image_name}:${version} \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker stop ${container_name} || true  \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker rm ${container_name} || true \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"sudo docker rmi ${image_name}:${version} || true \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"cd ${deploy_path} && sudo docker build -t ${image_name}:${version} . \""
+            sh "ssh -i ${ssh_key_path} -t centos@${server} \"cd ${deploy_path} && sudo docker run --name ${container_name} -p ${deploy_port}:8080 -d ${image_name}:${version} \""
         }
     }catch(e){
         err_msg = "${e}"
