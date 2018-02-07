@@ -1,65 +1,88 @@
-# Simple API for http request
-test
+# Backend Instruction
+
+Backend provide
+
 ## 1. How to Install
-```
-git clone git@github.com:azabustudio/demoBackend.git
-cd demoBackend
-npm install
-```
+
+  ```cmd
+  git clone git@github.com:azabustudio/demoBackend.git
+  cd demoBackend
+  npm install
+  ```
 
 ## 2. How to Run
-### start the server
-```
-cd demoBackend
-node app.js [port]
-```
+
+### Start the server
+
+  ```cmd
+  cd demoBackend
+  node app.js [port]
+  ```
 The server listens to the port `8080` at default.
 You can change the listenning port by give the start command an optional parameter `port`.
 
-### send a request
-there are two kinds of requests
+### Send a request
 
-1. login (GET)<br>
-send the username & password to verify.
-```
-URL: /login
-URL Params: username, password
-```
-2. get category (GET)<br>
-get the category.
-```
-URL: /getStatus
-URL Params: category
-```
-3. Register user (POST)<br>
-Register a user.
-```
-url: /addUser
-Body:
-{
-  "loginName" : "a",
-  "password" : "b",
-  "lastName" : "c",
-  "firstName" : "d"
-}
-```
-4. Add claim (POST)<br>
-Add a claim record.
-```
-url: /addClaim
-Body:
-{
-    "loginName" = "a",
-    "id" = "b",
-    "catetory" = "c",
-    "name" = "d",
-    "content" = "e"
-}
-```
+**About the response:** as usual, a rest api should return different status code in response. In this project, all the response returns status 200 while they carrying the real status information in the response body. If you are doing some future work on this, please design full response structure.
 
-5. get claim list (GET)<br>
-Get all of claims belong to the longin user.
-```
-URL: /getClaimList
-URL Params: loginName
-```
+We describe the REST api refer to [here](https://bocoup.com/blog/documenting-your-api)
+
+1. Get status
+    |||
+    |-:|:-|
+    |***Title***|get the status of claim|
+    |___URL___|/getStatus?category=:category|
+    |___Method___|GET|
+    |___URL Params___|**Required:** category=[string]|
+    ||**Example:** category=A|
+    ||-|
+
+1. Add a claim
+    |||
+    |-:|:-|
+    |***Title***|Add a claim record|
+    |___URL___|/addClaim|
+    |___Method___|POST|
+    |||
+
+    ___DATA Params___
+
+    **Example:**
+    ```json
+    {
+        "loginName" = "a",
+        "id" = "b",
+        "catetory" = "c",
+        "name" = "d",
+        "content" = "e"
+    }
+    ```
+1. Get claim list
+    |||
+    |-:|:-|
+    |***Title***|Get all claims belong to specic user|
+    |___URL___|/getClaimList|
+    |___Method___|POST|
+    |___URL Params___|**Required:** loginName=[string]|
+    ||**Example:** loginName=testUser|
+    |||
+
+1. Update a claim
+    |||
+    |-:|:-|
+    |***Title***|Update claim|
+    |___URL___|/updateClaim|
+    |___Method___|POST|
+    |||
+
+    ___DATA Params___
+
+      **Example:**
+      ```json
+      {
+          "id" = "b",
+          "catetory" = "c",
+          "name" = "d",
+          "content" = "e"
+      }
+      ```
