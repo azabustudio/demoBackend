@@ -1,6 +1,6 @@
 # Backend Instruction
 
-Backend provide REST api for frontend application.
+Backend provide REST api for frontend application. This document shows how to install and use the REST apis.
 
 ## 1. How to Install
 
