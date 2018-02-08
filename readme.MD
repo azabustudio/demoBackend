@@ -42,7 +42,6 @@ We describe the REST api refer to [here](https://bocoup.com/blog/documenting-you
     |-:|:-|
     |___URL___|/addClaim|
     |___Method___|POST|
-    |||
 
     ___DATA Params___
 
@@ -71,7 +70,6 @@ We describe the REST api refer to [here](https://bocoup.com/blog/documenting-you
     |-:|:-|
     |___URL___|/updateClaim|
     |___Method___|POST|
-    |||
 
     ___DATA Params___
 
