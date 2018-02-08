@@ -49,7 +49,6 @@ We describe the REST api refer to [here](https://bocoup.com/blog/documenting-you
     ```json
     {
         "loginName" : "a",
-        "id" : "b",
         "catetory" : "c",
         "name" : "d",
         "content" : "e"
