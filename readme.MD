@@ -28,19 +28,18 @@ You can change the listenning port by give the start command an optional paramet
 We describe the REST api refer to [here](https://bocoup.com/blog/documenting-your-api)
 
 1. Get status
-    |||
+
+    |___Title___|get the status of claim|
     |-:|:-|
-    |***Title***|get the status of claim|
     |___URL___|/getStatus?category=:category|
     |___Method___|GET|
     |___URL Params___|**Required:** category=[string]|
     ||**Example:** category=A|
-    ||-|
 
 1. Add a claim
-    |||
+
+    |___Title___|Add a claim record|
     |-:|:-|
-    |***Title***|Add a claim record|
     |___URL___|/addClaim|
     |___Method___|POST|
     |||
@@ -50,27 +49,26 @@ We describe the REST api refer to [here](https://bocoup.com/blog/documenting-you
     **Example:**
     ```json
     {
-        "loginName" = "a",
-        "id" = "b",
-        "catetory" = "c",
-        "name" = "d",
-        "content" = "e"
+        "loginName" : "a",
+        "id" : "b",
+        "catetory" : "c",
+        "name" : "d",
+        "content" : "e"
     }
     ```
 1. Get claim list
-    |||
+
+    |___Title___|Get all claims belong to specic user|
     |-:|:-|
-    |***Title***|Get all claims belong to specic user|
     |___URL___|/getClaimList|
     |___Method___|POST|
     |___URL Params___|**Required:** loginName=[string]|
     ||**Example:** loginName=testUser|
-    |||
 
 1. Update a claim
-    |||
+
+    |___Title___|Update claim|
     |-:|:-|
-    |***Title***|Update claim|
     |___URL___|/updateClaim|
     |___Method___|POST|
     |||
@@ -80,9 +78,9 @@ We describe the REST api refer to [here](https://bocoup.com/blog/documenting-you
       **Example:**
       ```json
       {
-          "id" = "b",
-          "catetory" = "c",
-          "name" = "d",
-          "content" = "e"
+          "id" : "b",
+          "catetory" : "c",
+          "name" : "d",
+          "content" : "e"
       }
       ```
