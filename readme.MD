@@ -1,6 +1,6 @@
 # Backend Instruction
 
-Backend provide
+Backend provide REST api for frontend application.
 
 ## 1. How to Install
 
