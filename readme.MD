@@ -60,7 +60,7 @@ We describe the REST api refer to [here](https://bocoup.com/blog/documenting-you
     |___Title___|Get all claims belong to specic user|
     |-:|:-|
     |___URL___|/getClaimList|
-    |___Method___|POST|
+    |___Method___|GET|
     |___URL Params___|**Required:** loginName=[string]|
     ||**Example:** loginName=testUser|
 
